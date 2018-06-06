@@ -1,0 +1,25 @@
+---
+# tasks file for ansible-role-kubectl/
+
+- name: Install prerequisite packages
+  apt:
+    name:         "{{ item }}"
+    state:        latest
+    update_cache: yes
+  with_items: "{{ kubectl_prerequisites }}"
+
+- name: Add Kubernetes GPG keys for apt
+  apt_key:
+    url:   https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- apt_repository:
+    repo:  deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+
+- name: Install kubectl binary
+  apt:
+    name:         kubectl
+    state:        latest
+    update_cache: yes
+
